@@ -1,9 +1,10 @@
 from fastapi import FastAPI, Query
 from fastapi.responses import HTMLResponse
+from typing import Annotated
+
 import chess
 import chess.svg
 import random
-
 
 
 # Modern x402 setup (testnet, Base Sepolia)
