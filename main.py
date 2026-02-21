@@ -200,6 +200,17 @@ def get_hint(
             <div>{svg}</div>
             <p><a href="/puzzle">Back to new puzzle</a></p>
         </body>
+
+        <script>
+  // Force all fetches to use HTTPS
+  const originalFetch = window.fetch;
+  window.fetch = function(url, options) {
+    if (typeof url === 'string' && url.startsWith('http://')) {
+      url = url.replace('http://', 'https://');
+    }
+    return originalFetch(url, options);
+  };
+</script>
         </html>
         """
         return HTMLResponse(content=html)
