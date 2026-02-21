@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Query
 from fastapi.responses import HTMLResponse
 from typing import Annotated
+from fastapi.middleware.cors import CORSMiddleware
 
 import chess
 import chess.svg
@@ -15,6 +16,14 @@ from x402.mechanisms.evm.exact import ExactEvmServerScheme
 from x402.server import x402ResourceServer
 
 app = FastAPI(title="Adaptive Chess Puzzle Tutor - Testnet")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all (for testing; tighten later)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # === YOUR PHANTOM WALLET ADDRESS ON BASE SEPOLIA ===
 PAY_TO_ADDRESS = "0xaDFD51c4cd7CB2C70C26ea58e62EFd354329475A"  # Paste exactly (0x...)
