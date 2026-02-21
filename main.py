@@ -184,12 +184,12 @@ def get_hint(
             "evaluation": f"{eval_score / 100:.2f}",
             "fen": fen
         }
-else:
-    # HTML response
-    svg = chess.svg.board(board=board, size=400)
+    else:
+        # HTML response
+        svg = chess.svg.board(board=board, size=400)
 
-    html = f"""
-    <!DOCTYPE html>
+        html = f"""
+        <!DOCTYPE html>
     <html>
     <head><title>Chess Hint - Level {level}</title>
     <style>svg {{ max-width: 400px; display: block; margin: 20px auto; }}</style></head>
@@ -202,20 +202,30 @@ else:
         <p><a href="/puzzle">Back to new puzzle</a></p>
     </body>
 
+    <!-- JavaScript to force HTTPS for retries -->
     <script>
-      // Force all fetches to use HTTPS
       const originalFetch = window.fetch;
       window.fetch = function(url, options) {{
-        if (typeof url === 'string' && url.startsWith('http://')) {{
-          url = url.replace('http://', 'https://');
+        console.log('Fetching:', url);  // Debug: see what URL is being used
+        if (typeof url === 'string') {{
+          if (url.startsWith('http://')) {{
+            url = url.replace('http://', 'https://');
+          }}
+          // If relative URL (starts with /), prepend current origin (https)
+          if (url.startsWith('/')) {{
+            url = window.location.origin + url;
+          }}
         }}
-        return originalFetch(url, options);
+        return originalFetch(url, options).catch(err => {{
+          console.error('Fetch error:', err);
+          throw err;
+        }});
       }};
     </script>
 
-    </html>
-    """
-    return HTMLResponse(content=html)
+        </html>
+        """
+        return HTMLResponse(content=html)
 
 @app.get("/")
 def home():
