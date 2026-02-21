@@ -17,6 +17,17 @@ from x402.server import x402ResourceServer
 
 app = FastAPI(title="Adaptive Chess Puzzle Tutor - Testnet")
 
+from fastapi import Request
+from fastapi.responses import RedirectResponse
+
+@app.middleware("http")
+async def force_https(request: Request, call_next):
+    if request.url.scheme == "http" and not request.headers.get("x-forwarded-proto") == "https":
+        url = request.url._url.replace("http://", "https://", 1)
+        return RedirectResponse(url, status_code=301)
+    response = await call_next(request)
+    return response
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allow all (for testing; tighten later)
