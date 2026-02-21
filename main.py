@@ -184,38 +184,38 @@ def get_hint(
             "evaluation": f"{eval_score / 100:.2f}",
             "fen": fen
         }
-    else:
-        # HTML response
-svg = chess.svg.board(board=board, size=400)
+else:
+    # HTML response
+    svg = chess.svg.board(board=board, size=400)
 
-html = f"""
-<!DOCTYPE html>
-<html>
-<head><title>Chess Hint - Level {level}</title>
-<style>svg {{ max-width: 400px; display: block; margin: 20px auto; }}</style></head>
-<body style="font-family: Arial; text-align: center;">
-    <h1>Hint Level {level}</h1>
-    <p><strong>Hint:</strong> {hint_text}</p>
-    <p><strong>SAN:</strong> {san}</p>
-    <p><strong>UCI:</strong> {uci}</p>
-    <div>{svg}</div>
-    <p><a href="/puzzle">Back to new puzzle</a></p>
-</body>
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><title>Chess Hint - Level {level}</title>
+    <style>svg {{ max-width: 400px; display: block; margin: 20px auto; }}</style></head>
+    <body style="font-family: Arial; text-align: center;">
+        <h1>Hint Level {level}</h1>
+        <p><strong>Hint:</strong> {hint_text}</p>
+        <p><strong>SAN:</strong> {san}</p>
+        <p><strong>UCI:</strong> {uci}</p>
+        <div>{svg}</div>
+        <p><a href="/puzzle">Back to new puzzle</a></p>
+    </body>
 
-<script>
-  // Force all fetches to use HTTPS
-  const originalFetch = window.fetch;
-  window.fetch = function(url, options) {{
-    if (typeof url === 'string' && url.startsWith('http://')) {{
-      url = url.replace('http://', 'https://');
-    }}
-    return originalFetch(url, options);
-  }};
-</script>
+    <script>
+      // Force all fetches to use HTTPS
+      const originalFetch = window.fetch;
+      window.fetch = function(url, options) {{
+        if (typeof url === 'string' && url.startsWith('http://')) {{
+          url = url.replace('http://', 'https://');
+        }}
+        return originalFetch(url, options);
+      }};
+    </script>
 
-</html>
-"""
-        return HTMLResponse(content=html)
+    </html>
+    """
+    return HTMLResponse(content=html)
 
 @app.get("/")
 def home():
